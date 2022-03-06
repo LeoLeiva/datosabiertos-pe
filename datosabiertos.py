@@ -2,30 +2,23 @@
 import os
 import pandas as pd
 import platform
-import random
-import sys, getopt
+import sys
 import time
 import zipfile
 
 from selenium import webdriver
-# from selenium.common.exceptions import NoSuchElementException
-# from selenium.webdriver.common.by import By
-# from selenium.webdriver.common.keys import Keys
-
 
 path = os.getcwd()
+
 
 def datosabiertos(sesion, delete_file):
     prefs = {'download.default_directory' : path}
     ChromeOptions = webdriver.ChromeOptions()
-    # ChromeOptions.add_argument("--headless")  # Hide the Browser
+    ChromeOptions.add_argument("--headless")  # Hide the Browser
     ChromeOptions.add_experimental_option("detach", True)
     ChromeOptions.add_argument('--disable-gpu')
     # ChromeOptions.add_argument("--remote-debugging-address=0.0.0.0")
     ChromeOptions.add_experimental_option('prefs', prefs)
-    # ChromeOptions.add_experimental_option("prefs", { \
-    #     "profile.default_content_setting_values.notifications": 2 # 1:allow, 2:block
-    #     })
     ChromeOptions.add_argument("--disable-infobars")
     ChromeOptions.add_argument('--no-sandbox')
 
@@ -34,6 +27,7 @@ def datosabiertos(sesion, delete_file):
     if sistema == "Windows":
         if sesion == True:
             ChromeOptions.add_argument('--user-data-dir={}\\{}'.format(path,"cache"))
+        # Debe descargar chromedriver en el mismo directorio del archivo py
         driver = webdriver.Chrome('chromedriver.exe', options=ChromeOptions)
     elif sistema == "Linux":
         if sesion == True:
@@ -105,4 +99,5 @@ if __name__== "__main__":
         sesion = True
     if "-d" in argv:
         delete_file = True
+
     datosabiertos(sesion, delete_file)

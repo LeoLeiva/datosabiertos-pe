@@ -1,15 +1,11 @@
+import os
 import time
 
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 import unittest
 
-# browser = webdriver.Chrome('./chromedriver_75')
-# browser.get('http://www.google.com')
-# assert 'Google' in browser.title
-# elem = browser.find_element_by_name('p')  # Find the search box
-# elem.send_keys('seleniumhq' + Keys.RETURN)
-# browser.quit()
+
+path = os.getcwd()
 
 
 class TestsLinkOk(unittest.TestCase):
@@ -53,6 +49,32 @@ class TestsLinkOk(unittest.TestCase):
         self.donaciones.send_keys("donaciones")
         self.driver.find_element_by_id("edit-submit-dkan-datasets").click()
         self.assertTrue ('1 Distribución de Datos' in self.driver.page_source)
+
+    def tearDown(self):
+        self.driver.quit()
+
+
+class DownloadCSVOk(unittest.TestCase):
+
+    def setUp(self):
+        ChromeOptions = webdriver.ChromeOptions()
+        ChromeOptions.add_argument("--headless")
+        self.driver = webdriver.Chrome(
+            '/usr/lib/chromium-browser/chromedriver', options=ChromeOptions)
+        self.driver.implicitly_wait(30)
+        self.driver.maximize_window()
+
+    def test_download_csv(self):
+        self.driver.get("https://www.datosabiertos.gob.pe/dataset/donaciones-covid-19-ministerio-de-economía-y-finanzas-mef")
+        self.driver.find_element_by_xpath(
+            "/html/body/div[3]/div/div/section/div/div/div/div/div[2]/div/div/div/article/div/div[3]/div/div/ul/li[3]/div/span/a").click()
+        time.sleep(5)
+        os.path.isfile("pcm_donaciones.zip")
+        self.assertTrue(os.path.isfile("pcm_donaciones.zip") is True)
+        dir_zip = os.listdir(path)
+        for item in dir_zip:
+            if item.endswith(".zip"):
+                os.remove( os.path.join(path, item))
 
     def tearDown(self):
         self.driver.quit()
