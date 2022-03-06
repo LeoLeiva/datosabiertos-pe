@@ -69,8 +69,7 @@ class DownloadCSVOk(unittest.TestCase):
         self.driver.find_element_by_xpath(
             "/html/body/div[3]/div/div/section/div/div/div/div/div[2]/div/div/div/article/div/div[3]/div/div/ul/li[3]/div/span/a").click()
         time.sleep(5)
-        os.path.isfile("pcm_donaciones.zip")
-        self.assertTrue(os.path.isfile("pcm_donaciones.zip") is True)
+        self.assertTrue(os.path.isfile("pcm_donaciones.zip"))
         dir_zip = os.listdir(path)
         for item in dir_zip:
             if item.endswith(".zip"):
